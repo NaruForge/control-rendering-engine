@@ -1,0 +1,84 @@
+architecture cascade "Cascaded voltage / current control" {
+  description "Synthetic reference study · Explicit ports, negative-feedback signs and portable equations. Not an OEM implementation."
+
+  quantity vo "Vo" "Output voltage" unit "V" exclusive
+  quantity il "IL" "Inductor current" unit "A"
+  quantity u "u" "Modulation command" unit "p.u."
+
+  component bridge converter "Power converter" technology "Illustrative control plant"
+  mode study "Reference study" group "Synthetic example" {
+    controls bridge { vo regulator }
+  }
+
+  block v_ref reference "Voltage reference" {
+    detail "Commanded output voltage"
+    math "V_o^*"
+    port output out EAST quantity vo
+  }
+  block sum_v sum "Voltage error" {
+    port reference in WEST quantity vo sign +
+    port feedback in SOUTH quantity vo sign -
+    port output out EAST quantity vo
+  }
+  block v_ctrl controller "Voltage controller" owner bridge {
+    detail "Outer loop"
+    math "K_{pv}+\\frac{K_{iv}}{s}"
+    port input in WEST quantity vo
+    port output out EAST quantity il
+  }
+  block limit limiter "Current reference limit" {
+    detail "Explicit saturation"
+    math "I_{min}\\leq I_L^*\\leq I_{max}"
+    port input in WEST quantity il
+    port output out EAST quantity il
+  }
+  block sum_i sum "Current error" {
+    port reference in WEST quantity il sign +
+    port feedback in SOUTH quantity il sign -
+    port output out EAST quantity il
+  }
+  block i_ctrl controller "Current controller" owner bridge {
+    detail "Inner loop"
+    math "K_{pi}+\\frac{K_{ii}}{s}"
+    port input in WEST quantity il
+    port output out EAST quantity u
+  }
+  block plant plant "Modulator / plant" owner bridge {
+    detail "Power conversion dynamics"
+    math "G_p(s)"
+    port input in WEST quantity u
+    port output out EAST
+  }
+  block sense measurement "Measurements" {
+    detail "Voltage and inductor current"
+    port input in WEST
+    port im out SOUTH quantity il
+    port vm out SOUTH quantity vo
+  }
+
+  signal ref_voltage v_ref.output -> sum_v.reference label "Vo*" quantity vo
+  signal voltage_error sum_v.output -> v_ctrl.input label "ev" quantity vo
+  signal current_raw v_ctrl.output -> limit.input label "IL*raw" quantity il
+  signal current_ref limit.output -> sum_i.reference label "IL*" quantity il
+  signal current_error sum_i.output -> i_ctrl.input label "ei" quantity il
+  signal modulation i_ctrl.output -> plant.input label "u" quantity u
+  signal plant_output plant.output -> sense.input label "y"
+  signal current_feedback sense.im -> sum_i.feedback label "IL" feedback quantity il
+  signal voltage_feedback sense.vm -> sum_v.feedback label "Vo" feedback quantity vo
+
+  view cascade control "Cascaded voltage / current control" { direction RIGHT }
+  view current_loop control "Inner current-loop detail" {
+    include limit, sum_i, i_ctrl, plant, sense
+    direction RIGHT
+  }
+  view measurement_trace control "Measurement neighbourhood" {
+    focus sense depth 1
+    direction RIGHT
+  }
+  view grouped control "Ownership-grouped control view" {
+    direction RIGHT
+    grouped
+  }
+  note "Summing input signs are declared explicitly. A feedback edge alone does not imply negative feedback."
+  note "This example illustrates architecture only. It does not specify gains, bandwidth, sampling, plant parameters or stability."
+}

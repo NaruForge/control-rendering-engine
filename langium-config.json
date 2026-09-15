@@ -1,0 +1,5 @@
+{
+  "projectName": "Control",
+  "languages": [{ "id": "control", "grammar": "src/language/control.langium", "fileExtensions": [".control"], "textMate": { "out": "syntax/control.tmLanguage.json" } }],
+  "out": "src/language/generated"
+}

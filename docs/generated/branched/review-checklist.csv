@@ -1,0 +1,6 @@
+"mode","component","quantity","role","review_status","evidence"
+"charge","front","vdc","regulator","NOT_REVIEWED",""
+"charge","ch_a","iout","unspecified","NOT_REVIEWED",""
+"charge","ch_b","iout","unspecified","NOT_REVIEWED",""
+"channel_a","front","vdc","regulator","NOT_REVIEWED",""
+"channel_a","ch_a","iout","unspecified","NOT_REVIEWED",""

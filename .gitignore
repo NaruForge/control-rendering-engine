@@ -3,6 +3,8 @@ dist/
 artifacts/
 .private/
 *.local.yaml
+*.local.control
 .env*
 !.env.example
 test-results/
+*.log

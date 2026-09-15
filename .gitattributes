@@ -3,5 +3,8 @@
 *.png binary
 *.pdf binary
 docs/generated/* linguist-generated=true
-schema/model.schema.json linguist-generated=true
+docs/generated/**/* linguist-generated=true
+schema/*.json linguist-generated=true
+src/language/generated/* linguist-generated=true
+syntax/control.tmLanguage.json linguist-generated=true
 package-lock.json linguist-generated=true

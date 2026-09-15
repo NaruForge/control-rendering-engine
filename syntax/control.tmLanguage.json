@@ -1,0 +1,61 @@
+{
+  "name": "control",
+  "scopeName": "source.control",
+  "fileTypes": [
+    ".control"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.control",
+      "match": "\\b(bidirectional|architecture|description|measurement|unspecified|controller|inner-loop|integrator|technology|component|converter|direction|exclusive|reference|regulator|subsystem|controls|external|feedback|junction|overview|quantity|transfer|command|control|extends|forward|grouped|include|limiter|reverse|detail|matrix|signal|switch|block|depth|focus|group|label|limit|modes|NORTH|owner|plant|power|RIGHT|SOUTH|DOWN|EAST|flow|gain|math|mode|note|port|sign|unit|view|WEST|bus|off|out|sum|in)\\b"
+    },
+    {
+      "name": "string.quoted.double.control",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.control"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.control"
+        },
+        {
+          "name": "comment.block.control",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.control"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.control"
+            }
+          }
+        }
+      ]
+    },
+    "string-character-escape": {
+      "name": "constant.character.escape.control",
+      "match": "\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|u\\{[0-9A-Fa-f]+\\}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
+    }
+  }
+}
