@@ -27,15 +27,14 @@ export async function layoutSignals(model: Model): Promise<SignalLayout> {
     })),
   };
   const elk = new ELK();
-  try {
-    const output = await elk.layout(graph);
-    return {
-      width: output.width ?? 0, height: output.height ?? 0,
-      nodes: (output.children ?? []).map(n => ({ id: n.id, x: n.x ?? 0, y: n.y ?? 0, width: n.width ?? 220, height: n.height ?? 100 })),
-      edges: (output.edges ?? []).map(e => ({ id: e.id,
-        paths: (e.sections ?? []).map(s => [s.startPoint, ...(s.bendPoints ?? []), s.endPoint]),
-        labels: (e.labels ?? []).map(l => ({ text: l.text ?? '', x: l.x ?? 0, y: l.y ?? 0, width: l.width ?? 0, height: l.height ?? 18 })),
-      })),
-    };
-  } finally { elk.terminateWorker(); }
+  // The bundled default backend is in-process; no external worker was created.
+  const output = await elk.layout(graph);
+  return {
+    width: output.width ?? 0, height: output.height ?? 0,
+    nodes: (output.children ?? []).map(n => ({ id: n.id, x: n.x ?? 0, y: n.y ?? 0, width: n.width ?? 220, height: n.height ?? 100 })),
+    edges: (output.edges ?? []).map(e => ({ id: e.id,
+      paths: (e.sections ?? []).map(s => [s.startPoint, ...(s.bendPoints ?? []), s.endPoint]),
+      labels: (e.labels ?? []).map(l => ({ text: l.text ?? '', x: l.x ?? 0, y: l.y ?? 0, width: l.width ?? 0, height: l.height ?? 18 })),
+    })),
+  };
 }
