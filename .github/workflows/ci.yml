@@ -1,0 +1,66 @@
+name: Verify renderer
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'scripts/**', 'tests/**', 'examples/**', 'schema/**', 'docs/generated/**', 'package*.json', '*config*', 'index.html', '.github/workflows/**']
+  pull_request:
+    paths: ['src/**', 'scripts/**', 'tests/**', 'examples/**', 'schema/**', 'docs/generated/**', 'package*.json', '*config*', 'index.html', '.github/workflows/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  core:
+    name: Core / ${{ matrix.os }} / Node ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, node: '24' }
+          - { os: windows-latest, node: '24' }
+          - { os: ubuntu-latest, node: '22.16.0' }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Type-check and build
+        run: npm run build
+      - run: npm run generate
+      - name: Generated text assets must match their semantic source
+        run: git diff --exit-code -- docs/generated schema
+  browser:
+    name: Chromium / UI and exports
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm run render
+      - run: npm run export -- artifacts/overview.svg artifacts/overview.png
+      - run: npm run export -- artifacts/overview.svg artifacts/overview.pdf
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: renderer-preview-and-browser-evidence
+          retention-days: 7
+          path: |
+            test-results
+            artifacts
