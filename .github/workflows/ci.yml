@@ -47,13 +47,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Dependency audit evidence
-        continue-on-error: true
+      - name: Fail on high-severity dependency advisories and retain the audit report
         run: |
           mkdir -p test-results
-          npm audit --json > test-results/dependency-audit.json
+          npm audit --audit-level=high --json > test-results/dependency-audit.json
       - run: npx playwright install --with-deps chromium
-      - run: npm run build && node scripts/browser-probe.mjs
       - run: npm run test:browser
       - run: npm run render -- --input examples/cascade.control --view current_loop --out artifacts
       - run: npm run export -- artifacts/current_loop.svg artifacts/current_loop.png
