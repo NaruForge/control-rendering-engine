@@ -1,4 +1,4 @@
-import ELK from 'elkjs/lib/elk.bundled.js';
+import { runElk } from './runtime.ts';
 import type { ElkNode } from 'elkjs/lib/elk-api';
 import type { ComputedView, ViewNode } from '../compiler/view.ts';
 import type { SceneNode, SceneEdge, ScenePort } from '../scene/types.ts';
@@ -66,7 +66,7 @@ export async function layoutGraph(view: ComputedView): Promise<{
             labels: e.label ? [{ text: e.label, width: width(e.label, 12), height: 18 }] : [],
         })),
     };
-    const output = await new ELK().layout(graph);
+    const output = await runElk(graph);
     const positions = new Map<string, {
         x: number;
         y: number;
