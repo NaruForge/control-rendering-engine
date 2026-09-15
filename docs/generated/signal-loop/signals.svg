@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1909.12" height="731" viewBox="0 0 1909.12 731" role="img" aria-labelledby="diagram-title diagram-description" font-family="Segoe UI, Noto Sans, Noto Sans KR, Arial, sans-serif">
+<title id="diagram-title">Cascaded Control Study</title>
+<desc id="diagram-description">A synthetic signal-flow example, independent of any customer implementation.</desc>
+<metadata>{&quot;generator&quot;:&quot;control-rendering-engine&quot;,&quot;schemaVersion&quot;:1,&quot;view&quot;:&quot;signals&quot;}</metadata>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#53657c" stroke-width="1.5"/></marker><marker id="signal-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#147d80" stroke-width="1.5"/></marker></defs>
+<rect width="100%" height="100%" fill="#f7f8fb"/>
+<text x="48" y="37" font-size="11" font-weight="700" fill="#147d80" letter-spacing="2">CONTROL RENDERING ENGINE</text>
+<text x="1861.12" y="37" font-size="11" font-weight="600" fill="#627184" text-anchor="end">MODEL v1  /  SIGNALS</text>
+<text x="48" y="82" font-size="36" font-weight="600" fill="#192639" >Cascaded Control Study</text>
+<text x="48" y="124" font-size="16" font-weight="400" fill="#627184" >A synthetic signal-flow example, independent of any customer implementation.</text>
+<text x="48" y="177" font-size="12" font-weight="700" fill="#147d80" >01</text>
+<text x="80" y="177" font-size="13" font-weight="600" fill="#627184" letter-spacing="1">VOLTAGE / CURRENT CASCADE</text>
+<text x="48" y="204" font-size="14" font-weight="400" fill="#627184" >Explicit signal connections; orthogonal routing and fixed-side ports by ELK.</text>
+<g transform="translate(48 248)">
+<path d="M254 82.5 L419.8 82.5" fill="none" stroke="#147d80" stroke-width="1.8"  marker-end="url(#signal-arrow)"/>
+<rect x="318.78" y="83.5" width="36.24" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="321.78" y="98.5" font-size="12" font-weight="600" fill="#147d80" >Vref</text>
+<path d="M641.8 82.5 L826.8 82.5" fill="none" stroke="#147d80" stroke-width="1.8"  marker-end="url(#signal-arrow)"/>
+<rect x="702.8" y="83.5" width="63" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="705.8" y="98.5" font-size="12" font-weight="600" fill="#147d80" >Iref_raw</text>
+<path d="M1046.8 82.5 L1201.56 82.5" fill="none" stroke="#147d80" stroke-width="1.8"  marker-end="url(#signal-arrow)"/>
+<rect x="1107.8" y="59.5" width="32.76" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="1110.8" y="74.5" font-size="12" font-weight="600" fill="#147d80" >Iref</text>
+<path d="M1423.56 82.5 L1559.12 82.5" fill="none" stroke="#147d80" stroke-width="1.8"  marker-end="url(#signal-arrow)"/>
+<rect x="1484.56" y="59.5" width="13.56" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="1487.56" y="74.5" font-size="12" font-weight="600" fill="#147d80" >u</text>
+<path d="M1779.12 82.5 L1789.12 82.5 L1789.12 311.5 L24 311.5 L24 229 L34 229" fill="none" stroke="#147d80" stroke-width="1.8"  marker-end="url(#signal-arrow)"/>
+<rect x="930.02" y="312.5" width="13.56" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="933.02" y="327.5" font-size="12" font-weight="600" fill="#147d80" >y</text>
+<path d="M254 248.5 L264 248.5 L264 255.5 L1312.56 255.5 L1312.56 133.5" fill="none" stroke="#147d80" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#signal-arrow)"/>
+<rect x="714.14" y="256.5" width="40.32" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="717.14" y="271.5" font-size="12" font-weight="600" fill="#147d80" >Imeas</text>
+<path d="M254 209.5 L530.8 209.5 L530.8 133.5" fill="none" stroke="#147d80" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#signal-arrow)"/>
+<rect x="315" y="210.5" width="43.8" height="22" rx="2" fill="#f7f8fb" stroke="#f7f8fb"/>
+<text x="318" y="225.5" font-size="12" font-weight="600" fill="#147d80" >Vmeas</text>
+<rect x="34" y="32.5" width="220" height="100" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="50" y="55.5" font-size="10" font-weight="600" fill="#147d80" >REFERENCE</text>
+<text x="50" y="81.5" font-size="17" font-weight="600" fill="#192639" >Voltage reference</text>
+<text x="50" y="107.5" font-size="12" font-weight="400" fill="#627184" >Vref</text>
+<rect x="420.8" y="32.5" width="220" height="100" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="436.8" y="55.5" font-size="10" font-weight="600" fill="#147d80" >CONTROLLER</text>
+<text x="436.8" y="81.5" font-size="17" font-weight="600" fill="#192639" >Voltage controller</text>
+<text x="436.8" y="107.5" font-size="12" font-weight="400" fill="#627184" >Outer loop</text>
+<rect x="826.8" y="24" width="220" height="117" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="842.8" y="47" font-size="10" font-weight="600" fill="#147d80" >LIMITER</text>
+<text x="842.8" y="73" font-size="17" font-weight="600" fill="#192639" >Current limit</text>
+<text x="842.8" y="99" font-size="12" font-weight="400" fill="#627184" >Saturation + anti-windup</text>
+<text x="842.8" y="116" font-size="12" font-weight="400" fill="#627184" >interface</text>
+<rect x="1202.56" y="32.5" width="220" height="100" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="1218.56" y="55.5" font-size="10" font-weight="600" fill="#147d80" >CONTROLLER</text>
+<text x="1218.56" y="81.5" font-size="17" font-weight="600" fill="#192639" >Current controller</text>
+<text x="1218.56" y="107.5" font-size="12" font-weight="400" fill="#627184" >Inner loop</text>
+<rect x="1559.12" y="32.5" width="220" height="100" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="1575.12" y="55.5" font-size="10" font-weight="600" fill="#147d80" >PLANT</text>
+<text x="1575.12" y="81.5" font-size="17" font-weight="600" fill="#192639" >Modulator / plant</text>
+<text x="1575.12" y="107.5" font-size="12" font-weight="400" fill="#627184" >Power conversion</text>
+<rect x="34" y="170.5" width="220" height="117" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="50" y="193.5" font-size="10" font-weight="600" fill="#147d80" >MEASUREMENT</text>
+<text x="50" y="219.5" font-size="17" font-weight="600" fill="#192639" >Measurements</text>
+<text x="50" y="245.5" font-size="12" font-weight="400" fill="#627184" >Voltage and current</text>
+<text x="50" y="262.5" font-size="12" font-weight="400" fill="#627184" >feedback</text>
+</g>
+<path d="M48 635.5L1861.12 635.5" fill="none" stroke="#dce3eb" stroke-width="1" />
+<text x="48" y="661.5" font-size="12" font-weight="400" fill="#627184" >This example demonstrates rendering only. Controller selection, dynamics and stability are not validated.</text>
+<text x="48" y="700.5" font-size="10" font-weight="600" fill="#627184" letter-spacing="1.4">SOURCE → MODEL → VIEW</text>
+<text x="1861.12" y="700.5" font-size="10" font-weight="400" fill="#627184" text-anchor="end">Generated deterministically · Edit the YAML, not this SVG</text>
+</svg>

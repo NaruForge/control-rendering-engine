@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="491" viewBox="0 0 1440 491" role="img" aria-labelledby="diagram-title diagram-description" font-family="Segoe UI, Noto Sans, Noto Sans KR, Arial, sans-serif">
+<title id="diagram-title">OBCM Control Architecture</title>
+<desc id="diagram-description">One power stage. Five operating modes. Explicit control responsibility.</desc>
+<metadata>{&quot;generator&quot;:&quot;control-rendering-engine&quot;,&quot;schemaVersion&quot;:1,&quot;view&quot;:&quot;topology&quot;}</metadata>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#53657c" stroke-width="1.5"/></marker><marker id="signal-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#147d80" stroke-width="1.5"/></marker></defs>
+<rect width="100%" height="100%" fill="#f7f8fb"/>
+<text x="48" y="37" font-size="11" font-weight="700" fill="#147d80" letter-spacing="2">CONTROL RENDERING ENGINE</text>
+<text x="1392" y="37" font-size="11" font-weight="600" fill="#627184" text-anchor="end">MODEL v1  /  TOPOLOGY</text>
+<text x="48" y="82" font-size="36" font-weight="600" fill="#192639" >OBCM Control Architecture</text>
+<text x="48" y="124" font-size="16" font-weight="400" fill="#627184" >One power stage. Five operating modes. Explicit control responsibility.</text>
+<text x="48" y="177" font-size="12" font-weight="700" fill="#147d80" >01</text>
+<text x="80" y="177" font-size="13" font-weight="600" fill="#627184" letter-spacing="1">POWER CONVERSION</text>
+<text x="1392" y="177" font-size="12" font-weight="400" fill="#627184" text-anchor="end">Hardware capability</text>
+<rect x="311.4" y="198" width="817.2" height="137" rx="12" fill="#e9f5f3" stroke="#dce3eb"/>
+<text x="324.4" y="215" font-size="11" font-weight="700" fill="#147d80" letter-spacing="1.5">OBCM</text>
+<path d="M289.4 272L321.4 272" fill="none" stroke="#53657c" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<path d="M565.8 272L597.8 272" fill="none" stroke="#53657c" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<path d="M842.1999999999999 272L874.1999999999999 272" fill="none" stroke="#53657c" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<path d="M1118.6 272L1150.6 272" fill="none" stroke="#53657c" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<rect x="48" y="225" width="238.4" height="94" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="64" y="248" font-size="10" font-weight="600" fill="#627184" letter-spacing="0.8">EXTERNAL</text>
+<text x="64" y="276" font-size="18" font-weight="600" fill="#192639" >AC interface</text>
+<text x="64" y="305" font-size="13" font-weight="400" fill="#627184" >Grid / Load</text>
+<rect x="324.4" y="225" width="238.4" height="94" rx="10" fill="#ffffff" stroke="#147d80"/>
+<text x="340.4" y="248" font-size="10" font-weight="600" fill="#627184" letter-spacing="0.8">POWER CONVERSION</text>
+<text x="340.4" y="276" font-size="18" font-weight="600" fill="#192639" >Inverter</text>
+<text x="340.4" y="305" font-size="13" font-weight="400" fill="#627184" >Bidirectional totem-pole</text>
+<rect x="600.8" y="225" width="238.4" height="94" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="616.8" y="248" font-size="10" font-weight="600" fill="#627184" letter-spacing="0.8">DC BUS</text>
+<text x="616.8" y="276" font-size="18" font-weight="600" fill="#192639" >DC-link</text>
+<text x="616.8" y="305" font-size="13" font-weight="400" fill="#627184" >Energy buffer</text>
+<rect x="877.1999999999999" y="225" width="238.4" height="94" rx="10" fill="#ffffff" stroke="#147d80"/>
+<text x="893.1999999999999" y="248" font-size="10" font-weight="600" fill="#627184" letter-spacing="0.8">POWER CONVERSION</text>
+<text x="893.1999999999999" y="276" font-size="18" font-weight="600" fill="#192639" >CLLC converter</text>
+<text x="893.1999999999999" y="305" font-size="13" font-weight="400" fill="#627184" >Bidirectional DC-DC</text>
+<rect x="1153.6" y="225" width="238.4" height="94" rx="10" fill="#ffffff" stroke="#dce3eb"/>
+<text x="1169.6" y="248" font-size="10" font-weight="600" fill="#627184" letter-spacing="0.8">EXTERNAL</text>
+<text x="1169.6" y="276" font-size="18" font-weight="600" fill="#192639" >EV battery</text>
+<text x="1169.6" y="305" font-size="13" font-weight="400" fill="#627184" >DC interface</text>
+<path d="M48 346L1392 346" fill="none" stroke="#dce3eb" stroke-width="1" />
+<text x="48" y="372" font-size="12" font-weight="400" fill="#627184" >Generic, illustrative example. Not an OEM-approved architecture or a statement of compliance.</text>
+<text x="48" y="397" font-size="12" font-weight="400" fill="#627184" >Control responsibility does not mean every listed quantity is an independent simultaneous setpoint. Unspecified loop roles remain unspecified.</text>
+<text x="48" y="422" font-size="12" font-weight="400" fill="#627184" >Hardware bidirectionality is distinct from the power-flow direction enabled in each operating mode.</text>
+<text x="48" y="461" font-size="10" font-weight="600" fill="#627184" letter-spacing="1.4">SOURCE → MODEL → VIEW</text>
+<text x="1392" y="461" font-size="10" font-weight="400" fill="#627184" text-anchor="end">Generated deterministically · Edit the YAML, not this SVG</text>
+</svg>
