@@ -1,0 +1,47 @@
+schemaVersion: 1
+title: Cascaded Control Study
+description: A synthetic signal-flow example, independent of any customer implementation.
+groups: [{ id: study, label: Illustrative study }]
+quantities:
+  - { id: voltage, symbol: V, label: Output voltage, unit: V, exclusive: true }
+stages:
+  - { id: source, label: DC source, kind: external }
+  - { id: stage, label: Power stage, kind: converter }
+  - { id: load, label: Load, kind: external }
+links:
+  - { id: input, from: source, to: stage, capability: forward }
+  - { id: output, from: stage, to: load, capability: forward }
+modes:
+  - id: study
+    label: Voltage regulation
+    group: study
+    flow: { input: forward, output: forward }
+    controls: { stage: [{ quantity: voltage, role: regulator }] }
+notes:
+  - This example demonstrates rendering only. Controller selection, dynamics and stability are not validated.
+signals:
+  title: Voltage / current cascade
+  description: Explicit signal connections; orthogonal routing and fixed-side ports by ELK.
+  nodes:
+    - { id: ref, label: Voltage reference, kind: reference, detail: Vref }
+    - id: voltage
+      label: Voltage controller
+      kind: controller
+      detail: Outer loop
+      ports: [{ id: reference, side: WEST }, { id: feedback, side: SOUTH }, { id: output, side: EAST }]
+    - { id: limit, label: Current limit, kind: limiter, detail: Saturation + anti-windup interface }
+    - id: current
+      label: Current controller
+      kind: controller
+      detail: Inner loop
+      ports: [{ id: reference, side: WEST }, { id: feedback, side: SOUTH }, { id: output, side: EAST }]
+    - { id: plant, label: Modulator / plant, kind: plant, detail: Power conversion }
+    - { id: measure, label: Measurements, kind: measurement, detail: Voltage and current feedback }
+  edges:
+    - { id: e1, from: { node: ref }, to: { node: voltage, port: reference }, label: Vref }
+    - { id: e2, from: { node: voltage, port: output }, to: { node: limit }, label: Iref_raw }
+    - { id: e3, from: { node: limit }, to: { node: current, port: reference }, label: Iref }
+    - { id: e4, from: { node: current, port: output }, to: { node: plant }, label: u }
+    - { id: e5, from: { node: plant }, to: { node: measure }, label: y }
+    - { id: e6, from: { node: measure }, to: { node: current, port: feedback }, label: Imeas, kind: feedback }
+    - { id: e7, from: { node: measure }, to: { node: voltage, port: feedback }, label: Vmeas, kind: feedback }

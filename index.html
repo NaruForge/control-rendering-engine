@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="Local-first architecture diagrams. Write the model; render the views."/>
+  <title>Control Rendering Engine</title>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">C<span>↗</span></span><div><strong>Control Rendering Engine</strong><small>NARUFORGE / ENGINEERING WORKBENCH</small></div></div>
+    <div class="header-actions"><span class="local-label">LOCAL PROCESSING</span><button id="import">Open YAML</button><button id="save-model">Save YAML</button><input type="file" id="file" accept=".yaml,.yml,.json" hidden/></div>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar">
+      <p class="eyebrow">MODEL</p>
+      <select id="example" aria-label="Example model"><option value="obcm">OBCM architecture</option><option value="signals">Signal-loop study</option></select>
+      <p class="eyebrow views-label">VIEWS</p>
+      <nav id="views" aria-label="Diagram views">
+        <button data-view="overview" class="active"><span>01</span> Architecture</button>
+        <button data-view="topology"><span>02</span> Power topology</button>
+        <button data-view="matrix"><span>03</span> Control matrix</button>
+        <button data-view="mode"><span>04</span> Mode detail</button>
+        <button data-view="signals"><span>05</span> Signal graph</button>
+      </nav>
+      <label class="eyebrow" for="mode">OPERATING MODE</label><select id="mode"></select>
+      <div class="sidebar-bottom"><label class="eyebrow" for="theme">PRESENTATION</label><select id="theme"><option value="studio">Studio / light</option><option value="midnight">Midnight / dark</option><option value="paper">Paper / monochrome</option></select><p>One semantic source.<br/>Multiple consistent views.</p><small>No cloud rendering.<br/>No API key. No telemetry.</small></div>
+    </aside>
+    <section class="workarea">
+      <div class="toolbar"><div><strong id="view-title">Architecture</strong><span id="stats"></span></div><div class="export-actions"><button id="toggle-source" aria-pressed="true">YAML</button><button id="export-png">PNG</button><button id="export-svg" class="primary">Export SVG</button></div></div>
+      <div class="panels">
+        <section class="editor" aria-label="YAML model editor"><div class="panel-heading"><span>SEMANTIC SOURCE</span><span id="dirty">EXAMPLE</span></div><textarea id="source" aria-label="YAML source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea><div class="editor-footer">Edit YAML · Preview updates automatically · Ctrl/Cmd + Enter to render</div></section>
+        <section class="preview" aria-label="Rendered diagram"><div class="canvas-tools"><span id="dimensions"></span><label>Zoom <input id="zoom" type="range" min="50" max="200" value="100" aria-label="Diagram zoom"/></label><button id="fit">Fit</button></div><div id="canvas-scroll"><div id="canvas"></div></div><pre id="error" role="alert" hidden></pre></section>
+      </div>
+      <footer class="statusbar"><span id="status" role="status" aria-live="polite">Loading model…</span><span>SVG · editable text · deterministic geometry</span></footer>
+    </section>
+  </main>
+  <script type="module" src="/src/app.ts"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": { "./schema/model.schema.json": "examples/*.yaml" },
+  "files.eol": "\n",
+  "editor.tabSize": 2
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+artifacts/
+.private/
+*.local.yaml
+.env*
+!.env.example
+test-results/

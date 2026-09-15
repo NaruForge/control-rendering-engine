@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.svg text
+*.png binary
+*.pdf binary
+docs/generated/* linguist-generated=true
+schema/model.schema.json linguist-generated=true
+package-lock.json linguist-generated=true

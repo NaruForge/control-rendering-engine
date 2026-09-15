@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=../schema/model.schema.json
+schemaVersion: 1
+title: OBCM Control Architecture
+description: One power stage. Five operating modes. Explicit control responsibility.
+groups:
+  - { id: grid, label: Grid-connected }
+  - { id: supply, label: Load-supply }
+quantities:
+  - { id: vdc, symbol: Vdc, label: DC-link voltage, unit: V, exclusive: true }
+  - { id: iac, symbol: Iac, label: AC current, unit: A }
+  - { id: ibat, symbol: Ibat, label: Battery current, unit: A }
+  - { id: vac, symbol: Vac, label: AC voltage, unit: V }
+  - { id: p, symbol: P, label: Active power, unit: W }
+  - { id: q, symbol: Q, label: Reactive power, unit: var }
+stages:
+  - { id: ac, label: AC interface, technology: Grid / Load, kind: external }
+  - { id: inverter, label: Inverter, technology: Bidirectional totem-pole, kind: converter }
+  - { id: link, label: DC-link, technology: Energy buffer, kind: bus }
+  - { id: cllc, label: CLLC converter, technology: Bidirectional DC-DC, kind: converter }
+  - { id: battery, label: EV battery, technology: DC interface, kind: external }
+boundary: { label: OBCM, members: [inverter, link, cllc] }
+links:
+  - { id: ac_inv, from: ac, to: inverter }
+  - { id: inv_link, from: inverter, to: link }
+  - { id: link_cllc, from: link, to: cllc }
+  - { id: cllc_bat, from: cllc, to: battery }
+modes:
+  - id: charging
+    label: Charging
+    group: grid
+    flow: { ac_inv: forward, inv_link: forward, link_cllc: forward, cllc_bat: forward }
+    controls:
+      inverter:
+        - { quantity: vdc, role: regulator }
+        - { quantity: iac }
+      cllc:
+        - { quantity: ibat }
+  - id: v2g
+    label: V2G-AC
+    group: grid
+    extends: charging
+    flow: { ac_inv: bidirectional, inv_link: bidirectional, link_cllc: bidirectional, cllc_bat: bidirectional }
+    controls:
+      inverter:
+        - { quantity: vdc, role: regulator }
+        - { quantity: iac }
+        - { quantity: q }
+      cllc:
+        - { quantity: ibat }
+        - { quantity: p }
+  - id: v2l
+    label: V2L
+    group: supply
+    flow: { ac_inv: reverse, inv_link: reverse, link_cllc: reverse, cllc_bat: reverse }
+    controls:
+      inverter:
+        - { quantity: vac, role: regulator }
+        - { quantity: iac }
+      cllc:
+        - { quantity: vdc, role: regulator }
+        - { quantity: ibat }
+  - { id: v2v, label: V2V, group: supply, extends: v2l }
+  - id: v2h
+    label: V2H-AC
+    group: supply
+    extends: v2l
+    note: Control-list reuse only. Islanding, parallel operation and reverse absorption are not inferred.
+focusQuantity: vdc
+notes:
+  - Generic, illustrative example. Not an OEM-approved architecture or a statement of compliance.
+  - Control responsibility does not mean every listed quantity is an independent simultaneous setpoint. Unspecified loop roles remain unspecified.
+  - Hardware bidirectionality is distinct from the power-flow direction enabled in each operating mode.
