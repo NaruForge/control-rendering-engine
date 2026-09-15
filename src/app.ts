@@ -3,9 +3,11 @@ import obcm from '../examples/obcm.yaml?raw';
 import signalExample from '../examples/signal-loop.yaml?raw';
 import { parseModel, render } from './engine.ts';
 import type { Diagram, Model, ThemeName, View } from './engine.ts';
+import { createViewport } from './viewport.ts';
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const source = el<HTMLTextAreaElement>('source'), modeSelect = el<HTMLSelectElement>('mode');
+const viewport = createViewport();
 const viewNames: Record<View, string> = { overview: 'Architecture', topology: 'Power topology', matrix: 'Control matrix', mode: 'Mode detail', signals: 'Signal graph' };
 let view: View = 'overview', sequence = 0, diagram: Diagram | undefined, model: Model | undefined, dirty = false;
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -35,6 +37,7 @@ async function update() {
     model = nextModel; diagram = nextDiagram;
     // Only our escaped, inert SVG renderer writes markup. Raw YAML/HTML is never inserted here.
     el('canvas').innerHTML = diagram.svg;
+    viewport.setSize(diagram.width, diagram.height);
     el('dimensions').textContent = `${diagram.width} × ${diagram.height}`;
     el('stats').textContent = `${model.modes.length} modes / ${model.stages.length} stages / ${model.quantities.length} quantities`;
     el('status').textContent = 'Model valid · Preview up to date'; exportEnabled(true);
@@ -90,8 +93,5 @@ el('toggle-source').addEventListener('click', () => {
   const hidden = document.querySelector('.panels')!.classList.toggle('source-hidden');
   el('toggle-source').setAttribute('aria-pressed', String(!hidden));
 });
-function zoom() { el('canvas').style.width = `${el<HTMLInputElement>('zoom').value}%`; }
-el('zoom').addEventListener('input', zoom);
-el('fit').addEventListener('click', () => { el<HTMLInputElement>('zoom').value = '100'; zoom(); });
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 void update();

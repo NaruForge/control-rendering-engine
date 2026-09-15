@@ -23,11 +23,13 @@ export async function layoutSignals(model: Model): Promise<SignalLayout> {
       ports: n.ports.map(p => ({ id: `${n.id}:${p.id}`, width: 1, height: 1, layoutOptions: { 'elk.port.side': p.side } })),
     })),
     edges: spec.edges.map(e => ({ id: e.id, sources: [endpoint(e.from)], targets: [endpoint(e.to)],
+      // Prefer ordinary signals in the reading direction; feedback may return.
+      // ELK evaluates this soft priority during cycle breaking. It is not a control priority.
+      layoutOptions: { 'elk.layered.priority.direction': e.kind === 'feedback' ? '0' : '1' },
       labels: e.label ? [{ text: e.label, width: textWidth(e.label, 12), height: 18 }] : [],
     })),
   };
   const elk = new ELK();
-  // The bundled default backend is in-process; no external worker was created.
   const output = await elk.layout(graph);
   return {
     width: output.width ?? 0, height: output.height ?? 0,

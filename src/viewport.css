@@ -1,0 +1,21 @@
+/* Independent viewport controls; no graph-specific placement rules. */
+.workspace.sidebar-hidden { grid-template-columns: minmax(0, 1fr); }
+.workspace.sidebar-hidden .sidebar { display: none; }
+.toolbar-heading { display: flex; align-items: center; gap: 10px; min-width: 0; }
+#toggle-sidebar { padding: 7px 9px; font-size: 11px; }
+.canvas-tools { flex-wrap: wrap; gap: 9px; }
+.canvas-tools button[aria-pressed="true"] { background: #e0f0ed; border-color: #9dc8c1; color: #176767; }
+.canvas-tools #zoom-value { width: 70px; text-align: right; font-variant-numeric: tabular-nums; }
+.canvas-tools #zoom { width: 110px; }
+#canvas-scroll { cursor: grab; touch-action: pan-x pan-y; overscroll-behavior: contain; outline-offset: -3px; }
+#canvas-scroll.panning { cursor: grabbing; }
+#canvas { user-select: none; }
+#canvas svg { max-width: none; }
+.pan-hint { margin-left: auto; }
+@media (max-width: 1100px) { .pan-hint { display: none; } }
+@media (max-width: 760px) {
+  .canvas-tools { gap: 6px; padding: 10px; }
+  .canvas-tools #zoom { width: 80px; }
+  .canvas-tools #dimensions { flex-basis: 100%; }
+  .toolbar-heading { gap: 6px; }
+}

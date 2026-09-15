@@ -53,6 +53,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - run: npm run generate
       - run: npm run render
       - run: npm run export -- artifacts/overview.svg artifacts/overview.png
       - run: npm run export -- artifacts/overview.svg artifacts/overview.pdf
@@ -64,3 +65,5 @@ jobs:
           path: |
             test-results
             artifacts
+            dist
+            docs/generated/signal-loop
