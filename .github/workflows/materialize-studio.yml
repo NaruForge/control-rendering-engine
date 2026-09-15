@@ -1,0 +1,79 @@
+name: Materialize reviewed studio source
+on:
+  push:
+    branches: [refactor/control-studio]
+    paths: [.studio-transfer/**, .github/workflows/materialize-studio.yml]
+permissions:
+  contents: read
+jobs:
+  materialize:
+    if: github.repository == 'NaruForge/control-rendering-engine' && github.ref == 'refs/heads/refactor/control-studio'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.16.0'
+      - name: Verify and materialize the reviewed public-source packet
+        shell: python
+        run: |
+          import pathlib, hashlib, lzma, json, shutil
+          root = pathlib.Path.cwd()
+          parts = sorted((root / '.studio-transfer').glob('*.part'))
+          assert len(parts) == 9, 'Missing transfer part'
+          decoded = lzma.decompress(b''.join(p.read_bytes() for p in parts))
+          assert hashlib.sha256(decoded).hexdigest() == '989f955ba87c46b1313c92ddbb95ad23ad2db76868c899da208a427e51b5469b', 'Source integrity mismatch'
+          payload = json.loads(decoded)
+          assert payload['base'] == 'b38070deb8bcb1043dcbe2b35ec25fa834f1bca5'
+          assert len(payload['files']) == 66 and len(payload['delete']) == 16
+          roots = {'src','scripts','tests','examples','docs','.agents','.vscode','.github'}
+          files = {'.gitattributes','.gitignore','AGENTS.md','README.md','index.html','langium-config.json','package.json','tsconfig.json','vite.config.ts'}
+          def checked(name):
+              p = pathlib.PurePosixPath(name)
+              assert not p.is_absolute() and '..' not in p.parts and '\\' not in name
+              assert p.parts[0] in roots or name in files
+              return root / p
+          for name, content in payload['files'].items():
+              p = checked(name)
+              if name.startswith('.github/'):
+                  assert p.read_text() == content, 'Workflow is applied separately through the authorized connector'
+                  continue
+              assert len(content.encode()) <= 131072
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_text(content, encoding='utf-8', newline='\n')
+          for name in payload['delete']:
+              p = checked(name)
+              if name.startswith('.github/'):
+                  assert not p.exists()
+              else:
+                  p.unlink(missing_ok=True)
+          for directory in ['docs/generated','schema','syntax','src/language/generated']:
+              shutil.rmtree(root / directory, ignore_errors=True)
+      - name: Retrieve the previously resolved dependency lock
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api repos/NaruForge/control-rendering-engine/actions/artifacts/10390711219/zip > "$RUNNER_TEMP/studio-dependencies.zip"
+      - name: Verify dependency lock integrity
+        shell: python
+        run: |
+          import os, pathlib, zipfile, hashlib
+          with zipfile.ZipFile(pathlib.Path(os.environ['RUNNER_TEMP']) / 'studio-dependencies.zip') as z:
+              data = z.read('package-lock.json')
+          assert hashlib.sha256(data).hexdigest() == 'adfda3a9431da6a9fe0fc9acd643372705205727a0e9acb8a8a7da380330a731'
+          pathlib.Path('package-lock.json').write_bytes(data)
+      - run: npm ci
+      - run: npm run check
+      - run: npm run generate
+      - name: Commit ordinary source and generated assets on the feature branch only
+        run: |
+          rm -rf .studio-transfer
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --name-only | grep '^.github/'; then echo 'Unexpected workflow change'; exit 1; fi
+          git commit -m 'feat: rebuild as Control Studio with typed compiler, React Flow, Langium and MCP'
+          git push origin HEAD:refactor/control-studio
