@@ -1,0 +1,33 @@
+name: Prepare studio development artifact
+on:
+  push:
+    branches: [refactor/control-studio]
+    paths: [package.json, .github/workflows/studio-bootstrap.yml]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.16.0'
+      - run: npm install
+      - name: Archive committed source and installed development dependencies
+        run: |
+          git archive --format=tar HEAD > studio-source.tar
+          tar --exclude='*.woff' --exclude='*.woff2' --exclude='*.ttf' --exclude='*.otf' -czf studio-dependencies.tar.gz node_modules
+          npm ls --depth=0 > dependencies.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: studio-development
+          retention-days: 1
+          path: |
+            studio-source.tar
+            studio-dependencies.tar.gz
+            package-lock.json
+            dependencies.txt
