@@ -11,7 +11,7 @@ try {
   const format = extname(output).toLowerCase();
   if (!['.png', '.pdf'].includes(format)) throw new Error('Output extension must be .png or .pdf');
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXECUTABLE || undefined });
-  const page = await browser.newPage({ viewport: { width: Math.ceil(width), height: Math.ceil(height) }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: Math.ceil(width), height: Math.ceil(height) }, deviceScaleFactor: 1, javaScriptEnabled: false });
   await page.route('**/*', route => route.abort());
   await page.setContent(`<style>@page{size:${width}px ${height}px;margin:0}html,body{margin:0;padding:0}svg{display:block;width:${width}px;height:${height}px}</style>${svg}`);
   await page.evaluate(() => document.fonts.ready);

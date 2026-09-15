@@ -1,0 +1,472 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "minItems": 1,
+  "maxItems": 32,
+  "type": "array",
+  "items": {
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "label"
+          },
+          "collection": {
+            "type": "string",
+            "enum": [
+              "components",
+              "blocks",
+              "quantities",
+              "modes"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "op",
+          "collection",
+          "id",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "assign_control"
+          },
+          "mode": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "component": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "quantity": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "regulator",
+              "inner-loop",
+              "command",
+              "limit",
+              "unspecified"
+            ]
+          }
+        },
+        "required": [
+          "op",
+          "mode",
+          "component",
+          "quantity",
+          "role"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "remove_control"
+          },
+          "mode": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "component": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "quantity": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          }
+        },
+        "required": [
+          "op",
+          "mode",
+          "component",
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "set_flow"
+          },
+          "mode": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "link": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "flow": {
+            "type": "string",
+            "enum": [
+              "forward",
+              "reverse",
+              "bidirectional",
+              "off"
+            ]
+          }
+        },
+        "required": [
+          "op",
+          "mode",
+          "link",
+          "flow"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "set_math"
+          },
+          "block": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "math": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "op",
+          "block",
+          "math"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "add_block"
+          },
+          "block": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "reference",
+                  "controller",
+                  "sum",
+                  "gain",
+                  "integrator",
+                  "transfer",
+                  "limiter",
+                  "plant",
+                  "measurement",
+                  "junction",
+                  "switch"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "math": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "ports": {
+                "minItems": 1,
+                "maxItems": 16,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "in",
+                        "out"
+                      ]
+                    },
+                    "side": {
+                      "type": "string",
+                      "enum": [
+                        "WEST",
+                        "EAST",
+                        "NORTH",
+                        "SOUTH"
+                      ]
+                    },
+                    "quantity": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                    },
+                    "sign": {
+                      "type": "string",
+                      "enum": [
+                        "+",
+                        "-"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "direction",
+                    "side"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "modes": {
+                "default": [],
+                "maxItems": 32,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "kind",
+              "ports",
+              "modes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "op",
+          "block"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "connect"
+          },
+          "signal": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "from": {
+                "type": "object",
+                "properties": {
+                  "block": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                  },
+                  "port": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                  }
+                },
+                "required": [
+                  "block",
+                  "port"
+                ],
+                "additionalProperties": false
+              },
+              "to": {
+                "type": "object",
+                "properties": {
+                  "block": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                  },
+                  "port": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                  }
+                },
+                "required": [
+                  "block",
+                  "port"
+                ],
+                "additionalProperties": false
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "kind": {
+                "default": "signal",
+                "type": "string",
+                "enum": [
+                  "signal",
+                  "feedback"
+                ]
+              },
+              "quantity": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              }
+            },
+            "required": [
+              "id",
+              "from",
+              "to",
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "op",
+          "signal"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "disconnect"
+          },
+          "signal": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          }
+        },
+        "required": [
+          "op",
+          "signal"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "add_view"
+          },
+          "view": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "overview",
+                  "power",
+                  "control",
+                  "matrix"
+                ]
+              },
+              "mode": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "include": {
+                "default": [],
+                "maxItems": 128,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                }
+              },
+              "focus": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "depth": {
+                "default": 2,
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "direction": {
+                "default": "RIGHT",
+                "type": "string",
+                "enum": [
+                  "RIGHT",
+                  "DOWN"
+                ]
+              },
+              "grouped": {
+                "default": false,
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "kind",
+              "include",
+              "depth",
+              "direction",
+              "grouped"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "op",
+          "view"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

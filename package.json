@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Model-first control architecture studio, portable diagrams and MCP tools.",
-  "engines": { "node": ">=22.16.0" },
+  "engines": {
+    "node": ">=22.16.0"
+  },
   "scripts": {
     "start": "vite --open",
     "dev": "vite",
@@ -12,18 +14,19 @@
     "typecheck": "tsc --noEmit",
     "build": "npm run language:generate && npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "node scripts/test.mjs",
     "check": "npm run language:generate && npm run typecheck && npm test && vite build",
     "render": "tsx src/cli/main.ts render",
     "validate": "tsx src/cli/main.ts validate",
     "migrate": "tsx src/cli/main.ts migrate",
     "diff": "tsx src/cli/main.ts diff",
     "generate": "tsx scripts/generate.ts",
-    "mcp": "tsx src/agent/server.ts",
-    "lsp": "tsx src/language/server.ts --stdio",
+    "mcp": "node scripts/mcp.mjs",
+    "lsp": "node scripts/lsp.mjs --stdio",
     "export": "node scripts/export.mjs",
     "browser:install": "playwright install chromium",
-    "test:browser": "npm run build && node scripts/browser-test.mjs"
+    "test:browser": "npm run build && node --import tsx scripts/browser-test.mjs",
+    "mcp:config": "node scripts/mcp-config.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.0",

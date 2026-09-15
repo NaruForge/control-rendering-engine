@@ -1,20 +1,21 @@
-# Verified baseline — 2026-09-15
+# Verification — reconstruction candidate
 
-Verified code/configuration commit: `435bcca1c0bee7dcc980f3fc40c5ec87644578cb`.
+Baseline: `4e36894`. Implementation work is on `refactor/control-studio`; the reviewed acceptance plan is `docs/review/studio-plan.md`.
 
-[GitHub Actions run — all four jobs passed](https://github.com/NaruForge/control-rendering-engine/actions/runs/34942238683)
+## Local checks completed
 
-| Environment | Completed checks |
-| --- | --- |
-| Windows runner / Node 24 | Clean `npm ci`, 26 tests, TypeScript check, Vite production build, all committed text projections regenerated without a diff |
-| Ubuntu runner / Node 24 | Same core checks |
-| Ubuntu runner / Node 22.16.0 | Same core checks at the declared minimum Node version |
-| Ubuntu / Playwright Chromium | Live YAML editing, invalid-model handling, view/theme switching, SVG and PNG downloads, ELK graph rendering, tablet-size screenshot, CLI PNG and PDF exports |
+Node 22.16: actual Langium generation, TypeScript typecheck, 53 tests, production bundling, generated schema and all bundled views. Tests include real official-SDK MCP stdio communication (from a different cwd), real LSP wire messages, CLI filesystem integration, v1 migration parity, format roundtrips, transactions, graph projections, nested ELK coordinates, feedback endpoints/signs, deterministic scene/export, math restrictions and geometric audit.
 
-The OBCM architecture, signal-workbench screenshot and exported one-page PDF were visually inspected. This is a review of the supplied examples, not a claim that every possible model size or label combination is visually verified.
+The local browser environment blocks navigations, so intermediate UI styling was inspected with an offline development harness. That is not counted as production browser verification. The unchanged production bundle is exercised on a GitHub Actions runner before integration. The development harness is not part of the repository.
 
-The browser smoke exercises the Vite development server. Production bundling is checked separately. macOS, Safari, Firefox and physical Android devices were not executed in this baseline. Browser/raster/PDF typography depends on installed fonts; only SVG geometry/text projections are checked for deterministic regeneration.
+## Required merge gate
 
-The temporary bootstrap workflow generated and committed the real npm lockfile, JSON Schema and public sample renders. It has been removed. The permanent CI has read-only repository permissions, and never commits generated changes.
+Windows/Node 24 and Ubuntu/Node 24/22.16 clean install + `npm run check` + deterministic generation, and the Production Chromium authoring/export job must all pass. Read actual captured overview, control diagram, matrix, source diagnostics, semantic review and tablet views. A generated artifact or screenshot file existing is not sufficient proof of layout quality.
 
-This test suite validates software behavior and selected declarative model constraints. It does not validate an OBCM's control stability, independent-setpoint feasibility, transition safety, standard conformance or certification. The generated CSV is explicitly an unreviewed checklist, not passed engineering evidence.
+The production test checks source editing and recovery, inspector operations, undo/redo, JSON-compatible source roundtrips, shared compiler/export equality, mode-specific power arrows, three themes, portable math, block creation, port connection, view creation, native zoom/pan and viewport-invariant exports. It records `test-results/verification.json` and screenshots in the CI artifact. CLI PNG/PDF outputs are included.
+
+## Limits
+
+The result is a local-first authoring service. No physical Android/iPad, macOS, Safari or Firefox execution is claimed. The browser suite emulates a 768 px viewport in desktop Chromium. Font appearance remains environment dependent. All tests are software/structural checks; they do not approve control design, dynamics, timing or standards compliance.
+
+The development preparation/transfer workflows are temporary branch tooling and are absent from the final implementation tree. Permanent CI has read-only repository permissions and does not mutate source. No customer specifications, credentials, external font files or dependency folders are included.

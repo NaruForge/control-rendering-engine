@@ -1,25 +1,34 @@
-# Agent working agreement
+# Control Studio: agent working agreement
 
-This is a TypeScript engineering-diagram renderer, not an autonomous control-design or compliance engine.
+This repository is a model-first control-diagram authoring service. It is NOT a control simulator, stability prover, or certification engine.
 
-## Source of truth
-- Edit `examples/*.yaml` for domain facts, `src/model.ts` for schema/validation, `src/render.ts` for composition, `src/theme.ts` for visual tokens, and `src/layout.ts` for graph geometry.
-- Never hand-edit generated SVG, CSV, Markdown, JSON Schema, or lockfile content. Regenerate using the relevant command.
-- Do not introduce OEM/confidential documents, CAN databases, unpublished parameters, credentials, remote fonts, or telemetry.
-- Preserve direction, mode scope, control ownership, units and unknowns. Do not infer V2H isolation, reverse absorption, independent setpoints, cascade loops, or compliance.
-- Synthetic examples must explicitly say they are synthetic.
+## Architecture and authority
 
-## Implementation
-- Core modules must work in browser and Node. Keep filesystem access in the CLI.
-- All user-controlled SVG/HTML/Markdown text must be escaped. Never evaluate YAML as code.
-- Keep output deterministic: stable ordering, fixed seeds, no timestamps, no random SVG IDs.
-- A child `controls.<stage>` replaces that stage's list. `[]` deliberately clears it. Never silently union lists.
-- Retain a single root package. Add no Docker, service, database, agent provider or framework unless the change actually requires it.
+- Authoring sources: `examples/*.control`, v2 YAML/JSON, or approved private files. Keep v1 `.yaml` examples as migration fixtures.
+- Semantic contracts: `src/domain`; source parsing/serialization/views: `src/compiler`; Langium grammar: `src/language/control.langium`.
+- Layout is ELK geometry in `src/layout`; portable scene/SVG in `src/scene`. React Flow `src/workbench` MUST use the same scene and primitives. Never introduce a second UI-only edge router or silently drag nodes away from exported geometry.
+- MCP `src/agent/server.ts`, LSP `src/language/server.ts`, CLI `src/cli/main.ts` are adapters, not separate business logic.
+- Do not edit `src/language/generated`, `schema`, `syntax`, or `docs/generated` manually. Use `npm run language:generate` and `npm run generate`.
+- Retain one root package. Add an infrastructure service, backend database or hosted AI dependency only when an accepted requirement actually needs one.
 
-## Minimum sufficient verification
-- Documentation-only: check links and command consistency. Do not run browsers.
-- Model/schema/renderer changes: `npm run typecheck`, `npm test`; regenerate affected outputs.
-- Workbench/export changes: also build and run browser smoke. Install Chromium only when these tests are needed.
-- Inspect at least one actual rendered result for layout changes; text-only tests cannot establish visual quality.
-- Explain what was tested and what was not. Never label a review checklist as passed engineering tests.
-- Do not run unrelated applications, containers, paid models or external providers to validate this repository.
+## Engineering facts
+
+Preserve power directions, mode scopes, independent unknowns, port directions, declared quantities, input signs and control ownership. Dashed feedback does NOT imply a negative sum sign. Do not infer loop bandwidth, priority, measurement location, grid/island state, V2H absorption or standard compliance.
+
+Control assignment lists replace inherited lists per component. Resolve the inherited list before editing, retain sibling quantities and inspect affected descendant modes. An exclusive regulator constraint is structural, not an energy-balance or control-stability proof.
+
+Synthetic examples must say so. Do not add OEM specifications, CAN databases, customer parameters, credentials or proprietary inputs to this public repository. Keep private inputs in `.private/`; ignoring files is not a substitute for reviewing staged changes.
+
+## AI workflow
+
+Read `.agents/skills/control-authoring/SKILL.md`. Use the MCP tools or CLI to inspect, propose a bounded semantic transaction, validate, render and compare. MCP tools do not write files. Apply returned source only after review. Semantic edits normalize formatting/comments; never claim a lossless text edit. Revision tokens detect stale models, not malicious modification.
+
+## Tests and review
+
+- Documentation-only: inspect links/commands; no browser run unless relevant.
+- Model/parser/view/scene changes: `npm run language:generate`, `npm run typecheck`, `npm test`, `npm run generate`.
+- UI/export changes: also `npm run test:browser` with Playwright Chromium. Read the actual screenshots; existence tests cannot establish visual quality.
+- `npm run check` runs generation, typecheck, tests and production bundling. Tests include actual MCP and LSP stdio clients.
+- Keep output deterministic, source limits enforced, text escaped and math restricted/offline. No remote fonts, telemetry or user-model auto-upload.
+- Do not commit dependency folders, raster proof images, dev harnesses or temporary preparation workflows. Permanent CI is read-only and must fail when generated files drift.
+- Report what was actually run, and distinguish browser viewport emulation from physical-device testing. Never mark the review CSV as passed engineering tests.

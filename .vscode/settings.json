@@ -1,5 +1,6 @@
 {
-  "yaml.schemas": { "./schema/model.schema.json": "examples/*.yaml" },
+  "yaml.schemas": { "./schema/model.schema.json": ["*.studio.yaml"] },
+  "files.associations": { "*.control": "plaintext" },
   "files.eol": "\n",
   "editor.tabSize": 2
 }

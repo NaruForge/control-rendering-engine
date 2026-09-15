@@ -1,0 +1,91 @@
+architecture obcm "OBCM Control Architecture" {
+  description "One power stage. Five operating modes. Explicit control responsibility."
+
+  quantity vdc "Vdc" "DC-link voltage" unit "V" exclusive
+  quantity iac "Iac" "AC current" unit "A"
+  quantity ibat "Ibat" "Battery current" unit "A"
+  quantity vac "Vac" "AC voltage" unit "V"
+  quantity p "P" "Active power" unit "W"
+  quantity q "Q" "Reactive power" unit "var"
+
+  component boundary subsystem "OBCM"
+  component ac external "AC interface" technology "Grid / Load"
+  component inverter converter "Inverter" technology "Bidirectional totem-pole" in boundary
+  component link bus "DC-link" technology "Energy buffer" in boundary
+  component cllc converter "CLLC converter" technology "Bidirectional DC-DC" in boundary
+  component battery external "EV battery" technology "DC interface"
+
+  power ac_inv ac -> inverter bidirectional
+  power inv_link inverter -> link bidirectional
+  power link_cllc link -> cllc bidirectional
+  power cllc_bat cllc -> battery bidirectional
+
+  mode charging "Charging" group "Grid-connected" {
+    flow ac_inv forward
+    flow inv_link forward
+    flow link_cllc forward
+    flow cllc_bat forward
+    controls inverter {
+      vdc regulator
+      iac unspecified
+    }
+    controls cllc {
+      ibat unspecified
+    }
+  }
+
+  mode v2g "V2G-AC" group "Grid-connected" extends charging {
+    flow ac_inv bidirectional
+    flow inv_link bidirectional
+    flow link_cllc bidirectional
+    flow cllc_bat bidirectional
+    controls inverter {
+      vdc regulator
+      iac unspecified
+      q unspecified
+    }
+    controls cllc {
+      ibat unspecified
+      p unspecified
+    }
+  }
+
+  mode v2l "V2L" group "Load-supply" {
+    flow ac_inv reverse
+    flow inv_link reverse
+    flow link_cllc reverse
+    flow cllc_bat reverse
+    controls inverter {
+      vac regulator
+      iac unspecified
+    }
+    controls cllc {
+      vdc regulator
+      ibat unspecified
+    }
+  }
+
+  mode v2v "V2V" group "Load-supply" extends v2l {
+  }
+
+  mode v2h "V2H-AC" group "Load-supply" extends v2l {
+    note "Control-list reuse only. Islanding, parallel operation and reverse absorption are not inferred."
+  }
+
+  view overview overview "Architecture overview" {
+    direction RIGHT
+  }
+
+  view power power "Power conversion" {
+    direction RIGHT
+    grouped
+  }
+
+  view matrix matrix "Control ownership" {
+    direction RIGHT
+  }
+
+  note "Generic, illustrative example. Not an OEM-approved architecture or a statement of compliance."
+  note "Control responsibility does not mean every listed quantity is an independent simultaneous setpoint. Unspecified loop roles remain unspecified."
+  note "Hardware bidirectionality is distinct from the power-flow direction enabled in each operating mode."
+}

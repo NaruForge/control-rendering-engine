@@ -1,0 +1,40 @@
+architecture branched "Branched Power Architecture" {
+  description "A synthetic two-channel power system. Shared components, explicit mode flows, and nested ownership."
+  quantity vdc "Vdc" "DC bus voltage" unit "V" exclusive
+  quantity iout "Iout" "Channel output current" unit "A"
+  component source external "AC source" technology "External supply"
+  component system subsystem "Power conversion system"
+  component front converter "Front-end converter" technology "Bidirectional AC/DC" in system
+  component bus bus "Common DC bus" in system
+  component outputs subsystem "Output channels" in system
+  component ch_a converter "Channel A" technology "Isolated DC/DC" in outputs
+  component ch_b converter "Channel B" technology "Isolated DC/DC" in outputs
+  component load_a external "Battery A"
+  component load_b external "Battery B"
+  power ac source -> front bidirectional
+  power dc front -> bus bidirectional
+  power a bus -> ch_a bidirectional
+  power b bus -> ch_b bidirectional
+  power out_a ch_a -> load_a bidirectional
+  power out_b ch_b -> load_b bidirectional
+  mode charge "Dual-channel charging" group "Energy transfer" {
+    flow ac forward
+    flow dc forward
+    flow a forward
+    flow b forward
+    flow out_a forward
+    flow out_b forward
+    controls front { vdc regulator }
+    controls ch_a { iout unspecified }
+    controls ch_b { iout unspecified }
+  }
+  mode channel_a "Channel A only" group "Energy transfer" extends charge {
+    flow b off
+    flow out_b off
+    controls ch_b { }
+  }
+  view network power "Branched power network" { grouped }
+  view flat power "Flattened topology" { }
+  view ownership matrix "Control assignments" { }
+  note "Synthetic example. Off arrows mean no enabled power transfer on those links; no converter stability or isolation claim is made."
+}

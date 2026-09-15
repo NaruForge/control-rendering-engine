@@ -1,0 +1,26 @@
+architecture symbols "Control Symbol Library" {
+  description "An illustrative signal chain for reviewing symbol geometry, declared ports and mathematical labels."
+  block ref reference "Reference" { port out out EAST }
+  block sum sum "Error" { port reference in WEST sign + port feedback in SOUTH sign - port out out EAST }
+  block gain gain "Gain" { math "K_p" port input in WEST port out out EAST }
+  block integrator integrator "Integrator" { math "\\frac{1}{s}" port input in WEST port out out EAST }
+  block filter transfer "Transfer function" { math "\\frac{1}{\\tau s+1}" port input in WEST port out out EAST }
+  block sat limiter "Saturation" { detail "Output bounds are unspecified" port input in WEST port out out EAST }
+  block selector switch "Selector" { detail "External selection logic" port input in WEST port out out EAST }
+  block plant plant "Plant" { math "G(s)" port input in WEST port out out EAST }
+  block point junction "Output" { port input in WEST port out out EAST }
+  block sensor measurement "Measurement" { math "H(s)" port input in WEST port out out SOUTH }
+  signal s1 ref.out -> sum.reference label "r"
+  signal s2 sum.out -> gain.input label "e"
+  signal s3 gain.out -> integrator.input label "u1"
+  signal s4 integrator.out -> filter.input label "u2"
+  signal s5 filter.out -> sat.input label "u3"
+  signal s6 sat.out -> selector.input label "u4"
+  signal s7 selector.out -> plant.input label "u"
+  signal s8 plant.out -> point.input label "y"
+  signal s9 point.out -> sensor.input label "y"
+  signal fb sensor.out -> sum.feedback label "ymeas" feedback
+  view symbols control "Control symbol chain" { }
+  view conditioning control "Signal conditioning" { include gain, integrator, filter, sat }
+  note "This is a drawing fixture, not a recommended control design. Stability, signal timing and selector behavior are not defined."
+}
